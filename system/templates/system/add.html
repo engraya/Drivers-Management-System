@@ -1,0 +1,37 @@
+{% extends 'system/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<h3 class="text-center m-4">Add Driver</h3>
+
+<!-- {% if success %}
+    <div class="alert alert-success" role="alert">
+        New Driver Added Successfully!.
+        <a href="{% url 'home' %}" class="alert-link">Go to Home Page</a>
+    </div>
+
+{% else %} -->
+<div class="row justify-content-center">
+    <div class="col-6">
+        <div class="card bg-light mb-3">
+            <div class="card-header">
+                <i class="fa-solid fa-address-card fa-lg"></i> Driver Registration
+            </div>
+            <div class="card-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <a href="{% url 'home' %}" class="btn btn-danger">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- {% endif %} -->
+
+
+
+{% endblock content %}

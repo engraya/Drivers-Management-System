@@ -1,0 +1,162 @@
+{% extends 'system/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<h3 class="m-4">All Drivers</h3>
+<div class="row">
+  <div class="col-12">
+    {% if drivers %}
+    <div class="card border-success ms-4 me-4 mb-4">
+      <div class="card-header">
+        <i class="fa-sharp fa-solid fa-list-ul fa-lg"></i> Drivers Records
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">S/N</th>
+                  <th scope="col">Driver ID</th>
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">State</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Phone Number</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Vehicle ID</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%for driver in page_obj %}
+                <tr class="table-default">
+                  <td>{{driver.id}}</td>
+                  <td>{{driver.driverID}}</td>
+                  <td>{{driver.firstName}}</td>
+                  <td>{{driver.lastName}}</td>
+                  <td>{{driver.gender}}</td>
+                  <td>{{driver.state}}</td>
+                  <td>{{driver.age}}</td>
+                  <td>+234 {{driver.phoneNumber}}</td>
+                  <td>{{driver.email}}</td>
+                  <td>{{driver.vehicleID}}</td>
+                  <td>
+                    <button type="button" class="btn btn-sm btn-success me-1" href="{% url 'driver' driver.id %}" data-bs-toggle="modal" data-bs-target="#myModal{{driver.id}}">
+                      <i class="fa-solid fa-circle-info fa-sm"></i>
+                      <!-- info -->
+                    </button>
+
+                    <!--mODAL VIEW dRIVER  -->
+                    <div class="modal" id="myModal{{driver.id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Driver : <strong>{{driver.firstName}} {{driver.lastName}}</strong></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true"></span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <ul class="list-unstyled">
+                              <li>Driver ID : <strong>{{driver.driverID}}</strong></li>
+                              <li>First Name : <strong>{{driver.firstName}}</strong></li>
+                              <li>Last Name : <strong>{{driver.lastName}}</strong></li>
+                              <li>Gender : <strong>{{driver.gender}}</strong></li>
+                              <li>State OF Origin : <strong>{{driver.state}}</strong></li>
+                              <li>Marital Status : <strong>{{driver.maritalStatus}}</strong></li>
+                              <li>Age : <strong>{{driver.age}}</strong></li>
+                              <li>Phone Number : <strong>{{driver.phoneNumber}}</strong></li>
+                              <li>Email : <strong>{{driver.email}}</strong></li>
+                              <li>Vehicle ID : <strong>{{driver.vehicleID}}</strong></li>
+                            </ul>      
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a class="btn btn-sm btn-warning me-1" href="{% url 'edit' driver.id %}">
+                      <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                      <!-- Edit -->
+                    </a>
+
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{driver.id}}">
+                      <i class="fa-solid fa-trash-can fa-lg"></i>
+                      <!-- Delete -->
+                    </button>
+                    
+                    <a href="{% url 'profile' driver.id %}"><button type="button" class="btn btn-sm btn-outline-success">Profile</button></a>
+
+                    <!--Modal Delete Driver-->
+                    <div class="modal" id="delete{{driver.id}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Driver : <strong>{{driver.firstName}} {{driver.lastName}}</strong></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true"></span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p>Are you Sure you want to Delete this Driver</p>
+                          </div>
+                          <div class="modal-footer">
+                            <form action="{% url 'delete' driver.id %}" method="POST">
+                              {% csrf_token %}
+                              <input type="submit" name="" value="Delete" class="btn btn-danger">
+                            </form>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        <!--Pagination -->
+        <ul class="pagination pagination-sm justify-content-center" style="margin:20px 0; color:darkcyan">
+          {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="#">Previous Page</a></li>
+          <li class="page-item"><a class="page-link" href="?page=1">&laquo; First Page</a></li>
+          {% endif %}
+
+          {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page= {{page_obj.next_page_number }}">Next Page</a></li>
+          <li class="page-item"><a class="page-link" href="?page= {{page_obj.paginator.num_pages }}">Last Page</a></li>
+          {% endif %}
+        </ul>
+        <!-- <div class="pagination pagination-sm">
+        <span class="step-links">
+          {% if page_obj.has_previous %}
+            <a class="page-link" href="?page=1">&laquo; First Page</a>
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page</a>
+          {% endif %}
+
+          <span class="page-item">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+          {% if page_obj.has_next %}
+            <a class="page-link" href="?page= {{page_obj.next_page_number }}">Next</a>
+            <a class="page-link" href="?page= {{page_obj.paginator.num_pages }}">Last &raquo;</a>
+          {% endif %}
+        </span>
+      </div> -->
+        </p>
+      </div>
+    </div>
+    {% else %}
+    <h4 class="alert alert-primary ms-4 me-4">No Drivers Records</h4>
+    {% endif %}
+  </div>
+</div>
+
+
+{% endblock content %}
